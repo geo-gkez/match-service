@@ -22,5 +22,6 @@ public interface MatchMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(ignore = true, target = "id")
+    @Mapping(target = "sport", expression = "java(SportEnum.fromValue(matchCreateOrUpdateRequest.sport()))")
     Match updateMatchFromMatchCreateOrUpdateRequest(MatchCreateOrUpdateRequest matchCreateOrUpdateRequest, @MappingTarget Match match);
 }
