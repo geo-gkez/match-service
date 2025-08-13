@@ -1,0 +1,28 @@
+### create a match
+POST http://localhost:8085/api/v1/matches
+Content-Type: application/json
+
+{
+  "matchDate": "15/03/2025",
+  "matchTime": "20:01",
+  "teamA": "Ajax",
+  "teamB": "PSV",
+  "sport": 1
+}
+
+### Get match by ID
+GET http://localhost:8085/api/v1/matches/1
+Content-Type: application/json
+
+### Update match by ID
+PUT http://localhost:8085/api/v1/matches/1
+Content-Type: application/json
+
+{
+
+  "matchDate": "16/03/2025"
+}
+
+### Delete match by ID
+DELETE http://localhost:8085/api/v1/matches/1
+Content-Type: application/json

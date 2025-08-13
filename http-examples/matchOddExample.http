@@ -1,0 +1,29 @@
+### Add a new odd
+POST http://localhost:8085/api/v1/matches/3/odds
+Content-Type: application/json
+
+{
+  "specifier": "1",
+  "odd": 1.5
+}
+
+### Get all odds for match with ID 1
+GET http://localhost:8085/api/v1/matches/3/odds?page=0&size=3
+Content-Type: application/json
+
+### Get odd by ID
+GET http://localhost:8085/api/v1/matches/3/odds/1
+Content-Type: application/json
+
+### Update odd by ID
+PUT http://localhost:8085/api/v1/matches/3/odds/1
+Content-Type: application/json
+
+{
+  "specifier": "1",
+  "odd": 2.0
+}
+
+### Delete odd by ID
+DELETE http://localhost:8085/api/v1/matches/3/odds/1
+Content-Type: application/json
