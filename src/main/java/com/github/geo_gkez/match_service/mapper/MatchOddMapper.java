@@ -25,5 +25,6 @@ public interface MatchOddMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "match", ignore = true)
     MatchOdd updateMatchOddFromMatchOddCreateOrUpdateRequest(MatchOddCreateOrUpdateRequest matchOddCreateOrUpdateRequest, @MappingTarget MatchOdd matchOdd);
 }
