@@ -21,6 +21,10 @@ public enum SportEnum {
     }
 
     public static SportEnum fromValue(Integer code) {
+        if (code == null) {
+            return null;
+        }
+
         return Stream.of(SportEnum.values())
                 .filter(s -> Objects.equals(s.getCode(), code))
                 .findFirst()

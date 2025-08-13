@@ -144,7 +144,7 @@ class MatchMapperTest {
                 LocalTime.of(21, 50),
                 null,
                 null,
-                null
+                2
         );
         Match existingMatch = Match.builder()
                 .id(1L)
@@ -167,6 +167,6 @@ class MatchMapperTest {
         assertThat(updatedMatch.getMatchTime()).isEqualTo(LocalTime.of(21, 50));
         assertThat(updatedMatch.getTeamA()).isEqualTo("Real Madrid");
         assertThat(updatedMatch.getTeamB()).isEqualTo("Bayern Munich");
-        assertThat(updatedMatch.getSport()).isEqualTo(SportEnum.FOOTBALL);
+        assertThat(updatedMatch.getSport()).isEqualTo(SportEnum.BASKETBALL);
     }
 }

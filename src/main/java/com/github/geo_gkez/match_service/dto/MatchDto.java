@@ -26,6 +26,6 @@ public record MatchDto(
         @Schema(description = "Second team", example = "Barcelona")
         String teamB,
         @Schema(description = "Sport type identifier", example = "1")
-        int sport
+        Integer sport
 ) {
 }

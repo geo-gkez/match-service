@@ -7,12 +7,14 @@ import com.github.geo_gkez.match_service.service.MatchOddService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,16 +29,34 @@ import static com.github.geo_gkez.match_service.constant.UrlPathConstants.*;
 public class MatchOddsController {
     private final MatchOddService matchOddService;
 
-    @GetMapping(V1_MATCHES + "/{matchId}" + ODDS)
     @Operation(summary = "Get all odds for a match", description = "Retrieve paginated list of all odds for a specific match")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Odds retrieved successfully",
                     content = @Content(schema = @Schema(implementation = PageMatchOddResponse.class))),
             @ApiResponse(responseCode = "404", description = "Match not found",
-                    content = @Content),
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class),
+                            examples = @ExampleObject(value = """
+                                    {
+                                        "type": "about:blank",
+                                        "title": "Not Found",
+                                        "status": 404,
+                                        "detail": "Match with ID 999 not found",
+                                        "instance": "/api/v1/matches/999/odds"
+                                    }
+                                    """))),
             @ApiResponse(responseCode = "400", description = "Invalid parameters",
-                    content = @Content)
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class),
+                            examples = @ExampleObject(value = """
+                                    {
+                                        "type": "about:blank",
+                                        "title": "Bad Request",
+                                        "status": 400,
+                                        "detail": "Invalid pagination parameters",
+                                        "instance": "/api/v1/matches/1/odds"
+                                    }
+                                    """)))
     })
+    @GetMapping(V1_MATCHES + "/{matchId}" + ODDS)
     public ResponseEntity<PageMatchOddResponse> getMatch(
             @Parameter(description = "Unique identifier of the match", required = true, example = "1")
             @PathVariable Long matchId,
@@ -49,7 +69,6 @@ public class MatchOddsController {
         return ResponseEntity.ok(pageMatchOddResponse);
     }
 
-    @GetMapping(V1_MATCHES + "/{matchId}" + ODDS + "/{matchOddId}")
     @Operation(summary = "Get specific match odd", description = "Retrieve a specific odd for a match by its unique identifier")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Match odd found successfully",
@@ -59,6 +78,7 @@ public class MatchOddsController {
             @ApiResponse(responseCode = "400", description = "Invalid match ID or match odd ID format",
                     content = @Content)
     })
+    @GetMapping(V1_MATCHES + "/{matchId}" + ODDS + "/{matchOddId}")
     public ResponseEntity<MatchOddDto> getMatchOdd(
             @Parameter(description = "Unique identifier of the match", required = true, example = "1")
             @PathVariable Long matchId,
@@ -69,7 +89,6 @@ public class MatchOddsController {
         return ResponseEntity.ok(matchOddDto);
     }
 
-    @PostMapping(V1_MATCHES + "/{matchId}" + ODDS)
     @Operation(summary = "Create a new match odd", description = "Create a new odd for a specific match")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Match odd created successfully",
@@ -81,6 +100,7 @@ public class MatchOddsController {
             @ApiResponse(responseCode = "422", description = "Validation error in match odd data",
                     content = @Content)
     })
+    @PostMapping(V1_MATCHES + "/{matchId}" + ODDS)
     public ResponseEntity<Void> createMatch(
             @Parameter(description = "Unique identifier of the match", required = true, example = "1")
             @PathVariable Long matchId,
@@ -91,7 +111,6 @@ public class MatchOddsController {
         return ResponseEntity.created(createLocationUri(matchId, matchOddId)).build();
     }
 
-    @PutMapping(V1_MATCHES + "/{matchId}" + ODDS + "/{matchOddId}")
     @Operation(summary = "Update an existing match odd", description = "Update the details of an existing match odd")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Match odd updated successfully",
@@ -103,6 +122,7 @@ public class MatchOddsController {
             @ApiResponse(responseCode = "422", description = "Validation error in match odd data",
                     content = @Content)
     })
+    @PutMapping(V1_MATCHES + "/{matchId}" + ODDS + "/{matchOddId}")
     public ResponseEntity<Void> updateMatchOdd(
             @Parameter(description = "Unique identifier of the match", required = true, example = "1")
             @PathVariable Long matchId,
@@ -119,7 +139,6 @@ public class MatchOddsController {
         return URI.create(API + V1_MATCHES + "/" + matchId + ODDS + "/" + matchOddId);
     }
 
-    @DeleteMapping(V1_MATCHES + "/{matchId}" + ODDS + "/{matchOddId}")
     @Operation(summary = "Delete a match odd", description = "Delete an existing match odd by its unique identifier")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Match odd deleted successfully",
@@ -129,6 +148,7 @@ public class MatchOddsController {
             @ApiResponse(responseCode = "400", description = "Invalid match ID or match odd ID format",
                     content = @Content)
     })
+    @DeleteMapping(V1_MATCHES + "/{matchId}" + ODDS + "/{matchOddId}")
     public ResponseEntity<Void> deleteMatchOdd(
             @Parameter(description = "Unique identifier of the match", required = true, example = "1")
             @PathVariable Long matchId,
