@@ -6,9 +6,13 @@ import com.github.geo_gkez.match_service.entity.Match;
 import com.github.geo_gkez.match_service.entity.enums.SportEnum;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -136,15 +140,16 @@ class MatchMapperTest {
                 .hasMessageContaining("Unknown sport code: 0");
     }
 
-    @Test
-    void givenMatchUpdateRequest_whenMappingToMatch_thenCorrectMatchReturned() {
+    @ParameterizedTest
+    @MethodSource("provideSportCodes")
+    void givenMatchUpdateRequest_whenMappingToMatch_thenCorrectMatchReturned(Integer sportCode, SportEnum sportEnum) {
         // given
         MatchCreateOrUpdateRequest matchCreateOrUpdateRequest = new MatchCreateOrUpdateRequest(
                 LocalDate.of(2025, 6, 28),
                 LocalTime.of(21, 50),
                 null,
                 null,
-                2
+                sportCode
         );
         Match existingMatch = Match.builder()
                 .id(1L)
@@ -153,7 +158,7 @@ class MatchMapperTest {
                 .matchTime(LocalTime.of(20, 45))
                 .teamA("Real Madrid")
                 .teamB("Bayern Munich")
-                .sport(SportEnum.FOOTBALL)
+                .sport(sportEnum)
                 .build();
 
         // when
@@ -167,6 +172,53 @@ class MatchMapperTest {
         assertThat(updatedMatch.getMatchTime()).isEqualTo(LocalTime.of(21, 50));
         assertThat(updatedMatch.getTeamA()).isEqualTo("Real Madrid");
         assertThat(updatedMatch.getTeamB()).isEqualTo("Bayern Munich");
-        assertThat(updatedMatch.getSport()).isEqualTo(SportEnum.BASKETBALL);
+        assertThat(updatedMatch.getSport()).isEqualTo(SportEnum.fromValue(sportCode));
     }
+
+    private static Stream<Arguments> provideSportCodes() {
+        return Stream.of(
+                Arguments.of(1, SportEnum.BASKETBALL),
+                Arguments.of(2, SportEnum.FOOTBALL)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideInvalidSportCodes")
+    void givenMatchUpdateRequestWithInvalidSport_whenMappingToMatch_thenThrowsException(Integer invalidSportCode) {
+        // given
+        MatchCreateOrUpdateRequest matchCreateOrUpdateRequest = new MatchCreateOrUpdateRequest(
+                LocalDate.of(2025, 6, 28),
+                LocalTime.of(21, 50),
+                null,
+                null,
+                invalidSportCode
+        );
+        Match existingMatch = Match.builder()
+                .id(1L)
+                .description("Real Madrid - Bayern Munich")
+                .matchDate(LocalDate.of(2025, 5, 28))
+                .matchTime(LocalTime.of(20, 45))
+                .teamA("Real Madrid")
+                .teamB("Bayern Munich")
+                .sport(SportEnum.FOOTBALL)
+                .build();
+
+        // when
+        ThrowableAssert.ThrowingCallable throwingCallable = () ->
+                MatchMapper.INSTANCE.updateMatchFromMatchCreateOrUpdateRequest(matchCreateOrUpdateRequest, existingMatch);
+
+        // then
+        assertThat(catchThrowable(throwingCallable))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Unknown sport code: " + invalidSportCode);
+    }
+
+    private static Stream<Arguments> provideInvalidSportCodes() {
+        return Stream.of(
+                Arguments.of(0),
+                Arguments.of(99),
+                Arguments.of(-1)
+        );
+    }
+
 }

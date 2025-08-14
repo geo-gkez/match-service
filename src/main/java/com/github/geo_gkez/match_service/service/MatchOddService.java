@@ -61,9 +61,12 @@ public class MatchOddService {
     public void updateMatchOdd(Long matchId, Long matchOddId, @Valid MatchOddCreateOrUpdateRequest matchOddCreateOrUpdateRequest) {
         MatchOdd matchOdd = findMatchOddByMatchIdAndMatchOddId(matchId, matchOddId);
 
-        MatchOdd updatedMatchOdd = matchOddMapper.updateMatchOddFromMatchOddCreateOrUpdateRequest(matchOddCreateOrUpdateRequest, matchOdd);
-
-        saveMatchOdd(updatedMatchOdd);
+        try {
+            MatchOdd updatedMatchOdd = matchOddMapper.updateMatchOddFromMatchOddCreateOrUpdateRequest(matchOddCreateOrUpdateRequest, matchOdd);
+            saveMatchOdd(updatedMatchOdd);
+        } catch (Exception e) {
+            throw new CRUDOperationsException(CRUDOpertionsEnum.UPDATE, matchId, matchOddId, 500);
+        }
     }
 
     @Transactional

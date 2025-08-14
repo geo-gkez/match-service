@@ -51,9 +51,16 @@ public class MatchService {
 
     public void updateMatch(Long matchId, MatchCreateOrUpdateRequest matchCreateOrUpdateRequest) {
         Match match = findMatchById(matchId);
-        Match updatedMatch = matchMapper.updateMatchFromMatchCreateOrUpdateRequest(matchCreateOrUpdateRequest, match);
+        updateMatch(matchId, matchCreateOrUpdateRequest, match);
+    }
 
-        saveMatch(updatedMatch);
+    private void updateMatch(Long matchId, MatchCreateOrUpdateRequest matchCreateOrUpdateRequest, Match match) {
+        try {
+            Match updatedMatch = matchMapper.updateMatchFromMatchCreateOrUpdateRequest(matchCreateOrUpdateRequest, match);
+            saveMatch(updatedMatch);
+        } catch (Exception e) {
+            throw new CRUDOperationsException(UPDATE, matchId, 500);
+        }
     }
 
     @Transactional
