@@ -4,6 +4,51 @@
 
 This project now includes comprehensive Swagger/OpenAPI documentation for all REST endpoints.
 
+## Running the Project
+
+### Prerequisites
+- Docker and Docker Compose installed on your system
+- No Java installation required on your local machine
+
+### Quick Start with Docker
+The easiest way to run the project is using Docker Compose, which will handle all dependencies and setup automatically:
+
+```bash
+# Clone the repository (if not already done)
+git clone <repository-url>
+cd match-service
+
+# Start the application using Docker Compose
+docker-compose up
+
+# To run in detached mode (background)
+docker-compose up -d
+
+# To stop the application
+docker-compose down
+```
+
+### What Docker Compose Includes
+- **Application Container**: Builds and runs the Match Service application
+- **Database**: Sets up the required database with proper configuration
+- **Network**: Creates isolated network for service communication
+- **Port Mapping**: Exposes the application on port 8080
+
+The application will be available at `http://localhost:8080` once all containers are up and running.
+
+### Alternative: Docker Build Only
+If you prefer to use Docker without Compose:
+
+```bash
+# Build the Docker image
+docker build -t match-service .
+
+# Run the container
+docker run -p 8080:8080 match-service
+```
+
+**Note**: When using Docker build only, you'll need to configure the database connection manually.
+
 ## Accessing the API Documentation
 
 ### Swagger UI
@@ -16,12 +61,12 @@ You can also access the raw OpenAPI specification at:
 - **URL**: http://localhost:8080/api-docs
 - **Format**: JSON format OpenAPI 3.0 specification
 
-## Features Added
+## API Documentation Features
 
 ### 1. OpenAPI Configuration
 - Custom API information with title, version, and description
-- Contact information and license details
-- Multiple server configurations (dev and production)
+- Contact information
+- Multiple server configurations 
 
 ### 2. Controller Documentation
 - **Match Management**: CRUD operations for sports matches
@@ -46,6 +91,7 @@ You can also access the raw OpenAPI specification at:
 ### 4. API Endpoints Documented
 
 #### Match Endpoints
+- `GET /api/v1/matches` - Get paginated matches
 - `GET /api/v1/matches/{matchId}` - Get match by ID
 - `POST /api/v1/matches` - Create new match
 - `PUT /api/v1/matches/{matchId}` - Update existing match
@@ -57,39 +103,6 @@ You can also access the raw OpenAPI specification at:
 - `POST /api/v1/matches/{matchId}/odds` - Create new match odd
 - `PUT /api/v1/matches/{matchId}/odds/{matchOddId}` - Update existing match odd
 - `DELETE /api/v1/matches/{matchId}/odds/{matchOddId}` - Delete match odd
-
-## Configuration
-
-The Swagger configuration is customizable through `application.properties`:
-
-```properties
-# OpenAPI/Swagger Configuration
-springdoc.api-docs.path=/api-docs
-springdoc.swagger-ui.path=/swagger-ui.html
-springdoc.swagger-ui.operationsSorter=method
-springdoc.swagger-ui.tagsSorter=alpha
-springdoc.show-actuator=false
-```
-
-## Testing the API
-
-1. Start the application: `./mvnw spring-boot:run`
-2. Open browser to: http://localhost:8080/swagger-ui.html
-3. Use the "Try it out" buttons to test endpoints interactively
-4. Review the schema definitions for request/response formats
-
-## Dependencies
-
-The project uses SpringDoc OpenAPI 3 with UI support:
-```xml
-<dependency>
-    <groupId>org.springdoc</groupId>
-    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-    <version>2.8.9</version>
-</dependency>
-```
-
-This provides modern OpenAPI 3.0 support and includes the Swagger UI. The error responses use Spring Framework's built-in `ProblemDetail` class which implements RFC 9457 standard for HTTP problem details.
 
 ## Error Response Format
 
