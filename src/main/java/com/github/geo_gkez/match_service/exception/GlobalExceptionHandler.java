@@ -10,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.Map;
 import java.util.Objects;
@@ -78,6 +79,16 @@ public class GlobalExceptionHandler {
         if (crudOperationsException.getMatchOddId() != null) {
             problemDetail.setProperty("matchOddId", crudOperationsException.getMatchOddId());
         }
+
+        return problemDetail;
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ProblemDetail handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception) {
+        log.error(exception.getMessage(), exception);
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Invalid type for argument: " + exception.getName());
+        problemDetail.setTitle("Type Mismatch Error");
 
         return problemDetail;
     }

@@ -3,11 +3,8 @@ package com.github.geo_gkez.match_service.integration_test;
 import com.github.geo_gkez.match_service.entity.Match;
 import com.github.geo_gkez.match_service.entity.MatchOdd;
 import com.github.geo_gkez.match_service.entity.enums.SportEnum;
-import com.github.geo_gkez.match_service.repository.MatchOddRepository;
-import com.github.geo_gkez.match_service.repository.MatchRepository;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -18,11 +15,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.matchesPattern;
 
 class MatchOddIntegrationTest extends BaseIntegrationTest {
-    @Autowired
-    private MatchRepository matchRepository;
-    @Autowired
-    private MatchOddRepository matchOddRepository;
-
     @Test
     void givenMatchOddCreateRequest_whenSaveMatchOdd_thenReturnCreatedMatchOdd() {
         Match save = matchRepository.save(

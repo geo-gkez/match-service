@@ -2,6 +2,7 @@ package com.github.geo_gkez.match_service.controller;
 
 import com.github.geo_gkez.match_service.dto.MatchCreateOrUpdateRequest;
 import com.github.geo_gkez.match_service.dto.MatchDto;
+import com.github.geo_gkez.match_service.dto.PageMatchResponse;
 import com.github.geo_gkez.match_service.service.MatchService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -29,6 +30,32 @@ import static com.github.geo_gkez.match_service.constant.UrlPathConstants.V1_MAT
 public class MatchController {
     private final MatchService matchService;
 
+    @Operation(summary = "Get all matches", description = "Retrieve a paginated list of all matches")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Matches retrieved successfully",
+                    content = @Content(schema = @Schema(implementation = PageMatchResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid pagination parameters",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class),
+                            examples = @ExampleObject(value = """
+                                    {
+                                        "type": "about:blank",
+                                        "title": "Bad Request",
+                                        "status": 400,
+                                        "detail": "Invalid pagination parameters",
+                                        "instance": "/api/v1/matches"
+                                    }
+                                    """)))
+    })
+    @GetMapping(V1_MATCHES)
+    public ResponseEntity<PageMatchResponse> getMatches(
+            @Parameter(description = "Page number for pagination", example = "0")
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @Parameter(description = "Number of matches per page", example = "10")
+            @RequestParam(value = "size", defaultValue = "10") int size) {
+        PageMatchResponse matchesPage = matchService.findAllMatches(page, size);
+
+        return ResponseEntity.ok(matchesPage);
+    }
 
     @Operation(summary = "Get match by ID", description = "Retrieve a specific match by its unique identifier")
     @ApiResponses(value = {
@@ -41,7 +68,7 @@ public class MatchController {
                                         "type": "about:blank",
                                         "title": "Not Found",
                                         "status": 404,
-                                        "detail": "Match with ID 999 not found",
+                                        "detail": "Read operation failed for match ID: 999",
                                         "instance": "/api/v1/matches/999"
                                     }
                                     """))),
@@ -52,7 +79,7 @@ public class MatchController {
                                         "type": "about:blank",
                                         "title": "Bad Request",
                                         "status": 400,
-                                        "detail": "Invalid match ID format",
+                                        "detail": "Invalid type for argument: matchId",
                                         "instance": "/api/v1/matches/invalid"
                                     }
                                     """)))
@@ -115,7 +142,7 @@ public class MatchController {
                                         "type": "about:blank",
                                         "title": "Not Found",
                                         "status": 404,
-                                        "detail": "Match with ID 999 not found",
+                                        "detail": "Read operation failed for match ID: 999",
                                         "instance": "/api/v1/matches/999"
                                     }
                                     """))),
@@ -169,7 +196,7 @@ public class MatchController {
                                         "type": "about:blank",
                                         "title": "Not Found",
                                         "status": 404,
-                                        "detail": "Match with ID 999 not found",
+                                        "detail": "Read operation failed for match ID: 999",
                                         "instance": "/api/v1/matches/999"
                                     }
                                     """))),
@@ -180,7 +207,7 @@ public class MatchController {
                                         "type": "about:blank",
                                         "title": "Bad Request",
                                         "status": 400,
-                                        "detail": "Invalid match ID format",
+                                        "detail": "Invalid type for argument: matchId",
                                         "instance": "/api/v1/matches/invalid"
                                     }
                                     """)))

@@ -3,11 +3,8 @@ package com.github.geo_gkez.match_service.integration_test;
 import com.github.geo_gkez.match_service.entity.Match;
 import com.github.geo_gkez.match_service.entity.MatchOdd;
 import com.github.geo_gkez.match_service.entity.enums.SportEnum;
-import com.github.geo_gkez.match_service.repository.MatchOddRepository;
-import com.github.geo_gkez.match_service.repository.MatchRepository;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -19,11 +16,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.matchesPattern;
 
 class MatchIntegrationTest extends BaseIntegrationTest {
-    @Autowired
-    private MatchRepository matchRepository;
-    @Autowired
-    private MatchOddRepository matchOddRepository;
-
     @Test
     void givenMatchId_whenGetMatch_thenReturnMatch() {
         Match save = matchRepository.save(
@@ -217,5 +209,72 @@ class MatchIntegrationTest extends BaseIntegrationTest {
                 .body("matchOddsDtos", Matchers.nullValue())
                 .body("isLast", Matchers.is(true));
 
+    }
+
+    @Test
+    void givenMultipleMatches_whenGetMatches_thenReturnPaginatedMatches() {
+        // given
+        Match match1 = Match.builder()
+                .description("Besiktas-Barcelona")
+                .matchDate(LocalDate.of(2025, 3, 20))
+                .matchTime(LocalTime.of(18, 25))
+                .teamA("Besiktas")
+                .teamB("Barcelona")
+                .sport(SportEnum.BASKETBALL)
+                .build();
+
+        Match match2 = Match.builder()
+                .description("Arsenal-Besiktas")
+                .matchDate(LocalDate.of(2027, 4, 10))
+                .matchTime(LocalTime.of(19, 30))
+                .teamA("Arsenal")
+                .teamB("Besiktas")
+                .sport(SportEnum.FOOTBALL)
+                .build();
+
+        Match match3 = Match.builder()
+                .description("Bayern-Dortmund")
+                .matchDate(LocalDate.of(2028, 5, 15))
+                .matchTime(LocalTime.of(20, 45))
+                .teamA("Bayern")
+                .teamB("Dortmund")
+                .sport(SportEnum.FOOTBALL)
+                .build();
+
+        matchRepository.saveAll(java.util.List.of(match1, match2, match3));
+
+        // when & then
+        //Test default pagination (page=0, size=10)
+        given(requestSpecification)
+                .when()
+                .get(API + V1_MATCHES)
+                .then()
+                .statusCode(200)
+                .body("matchDtos.size()", equalTo(3))
+                .body("totalElements", equalTo(3))
+                .body("totalPages", equalTo(1))
+                .body("isLast", equalTo(true));
+
+        // Test custom pagination (page=0, size=2)
+        given(requestSpecification)
+                .when()
+                .get(API + V1_MATCHES + "?page=0&size=2")
+                .then()
+                .statusCode(200)
+                .body("matchDtos.size()", equalTo(2))
+                .body("totalElements", equalTo(3))
+                .body("totalPages", equalTo(2))
+                .body("isLast", equalTo(false));
+
+        // Test second page (page=1, size=2)
+        given(requestSpecification)
+                .when()
+                .get(API + V1_MATCHES + "?page=1&size=2")
+                .then()
+                .statusCode(200)
+                .body("matchDtos.size()", equalTo(1))
+                .body("totalElements", equalTo(3))
+                .body("totalPages", equalTo(2))
+                .body("isLast", equalTo(true));
     }
 }

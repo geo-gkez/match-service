@@ -1,9 +1,12 @@
 package com.github.geo_gkez.match_service.integration_test;
 
+import com.github.geo_gkez.match_service.repository.MatchOddRepository;
+import com.github.geo_gkez.match_service.repository.MatchRepository;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
@@ -16,7 +19,12 @@ abstract class BaseIntegrationTest {
     @LocalServerPort
     private Integer localServerPort;
 
-    RequestSpecification requestSpecification;
+    protected RequestSpecification requestSpecification;
+
+    @Autowired
+    protected MatchRepository matchRepository;
+    @Autowired
+    protected MatchOddRepository matchOddRepository;
 
     @BeforeEach
     void setUp() {
@@ -28,6 +36,9 @@ abstract class BaseIntegrationTest {
                         MediaType.APPLICATION_JSON_VALUE
                 )
                 .build();
+
+        matchOddRepository.deleteAll();
+        matchRepository.deleteAll();
     }
 
 }

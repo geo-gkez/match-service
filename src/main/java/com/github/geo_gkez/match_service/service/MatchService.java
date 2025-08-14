@@ -2,6 +2,7 @@ package com.github.geo_gkez.match_service.service;
 
 import com.github.geo_gkez.match_service.dto.MatchCreateOrUpdateRequest;
 import com.github.geo_gkez.match_service.dto.MatchDto;
+import com.github.geo_gkez.match_service.dto.PageMatchResponse;
 import com.github.geo_gkez.match_service.entity.Match;
 import com.github.geo_gkez.match_service.exception.CRUDOperationsException;
 import com.github.geo_gkez.match_service.mapper.MatchMapper;
@@ -9,6 +10,8 @@ import com.github.geo_gkez.match_service.repository.MatchOddRepository;
 import com.github.geo_gkez.match_service.repository.MatchRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import static com.github.geo_gkez.match_service.exception.CRUDOpertionsEnum.*;
@@ -61,5 +64,11 @@ public class MatchService {
         } catch (Exception e) {
             throw new CRUDOperationsException(DELETE, matchId, 500);
         }
+    }
+
+    public PageMatchResponse findAllMatches(int page, int size) {
+        Page<Match> matches = matchRepository.findAll(PageRequest.of(page, size));
+
+        return matchMapper.matchesToPageMatchResponse(matches);
     }
 }

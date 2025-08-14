@@ -25,7 +25,7 @@ import static com.github.geo_gkez.match_service.constant.UrlPathConstants.*;
 @RestController
 @RequestMapping(API)
 @RequiredArgsConstructor
-@Tag(name = "Match Odds Management", description = "Operations for managing odds for sports matches")
+@Tag(name = "Match Odds Management", description = "Operations for managing odds for sports matchDtos")
 public class MatchOddsController {
     private final MatchOddService matchOddService;
 
@@ -40,19 +40,8 @@ public class MatchOddsController {
                                         "type": "about:blank",
                                         "title": "Not Found",
                                         "status": 404,
-                                        "detail": "Match with ID 999 not found",
+                                        "detail": "Read operation failed for match ID: 999",
                                         "instance": "/api/v1/matches/999/odds"
-                                    }
-                                    """))),
-            @ApiResponse(responseCode = "400", description = "Invalid parameters",
-                    content = @Content(schema = @Schema(implementation = ProblemDetail.class),
-                            examples = @ExampleObject(value = """
-                                    {
-                                        "type": "about:blank",
-                                        "title": "Bad Request",
-                                        "status": 400,
-                                        "detail": "Invalid pagination parameters",
-                                        "instance": "/api/v1/matches/1/odds"
                                     }
                                     """)))
     })
@@ -73,10 +62,28 @@ public class MatchOddsController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Match odd found successfully",
                     content = @Content(schema = @Schema(implementation = MatchOddDto.class))),
-            @ApiResponse(responseCode = "404", description = "Match or match odd not found",
-                    content = @Content),
-            @ApiResponse(responseCode = "400", description = "Invalid match ID or match odd ID format",
-                    content = @Content)
+            @ApiResponse(responseCode = "404", description = "Match not found",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class),
+                            examples = @ExampleObject(value = """
+                                    {
+                                        "type": "about:blank",
+                                        "title": "Not Found",
+                                        "status": 404,
+                                        "detail": "Read operation failed for match ID: 999",
+                                        "instance": "/api/v1/matches/999/odds"
+                                    }
+                                    """))),
+            @ApiResponse(responseCode = "400", description = "Invalid parameters",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class),
+                            examples = @ExampleObject(value = """
+                                    {
+                                        "type": "about:blank",
+                                        "title": "Bad Request",
+                                        "status": 400,
+                                        "detail": "Invalid pagination parameters",
+                                        "instance": "/api/v1/matches/1/odds"
+                                    }
+                                    """)))
     })
     @GetMapping(V1_MATCHES + "/{matchId}" + ODDS + "/{matchOddId}")
     public ResponseEntity<MatchOddDto> getMatchOdd(
@@ -94,11 +101,27 @@ public class MatchOddsController {
             @ApiResponse(responseCode = "201", description = "Match odd created successfully",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Match not found",
-                    content = @Content),
-            @ApiResponse(responseCode = "400", description = "Invalid match odd data provided",
-                    content = @Content),
-            @ApiResponse(responseCode = "422", description = "Validation error in match odd data",
-                    content = @Content)
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class),
+                            examples = @ExampleObject(value = """
+                                    {
+                                        "type": "about:blank",
+                                        "title": "Not Found",
+                                        "status": 404,
+                                        "detail": "Read operation failed for match ID: 999",
+                                        "instance": "/api/v1/matches/999/odds"
+                                    }
+                                    """))),
+            @ApiResponse(responseCode = "400", description = "Invalid parameters",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class),
+                            examples = @ExampleObject(value = """
+                                    {
+                                        "type": "about:blank",
+                                        "title": "Bad Request",
+                                        "status": 400,
+                                        "detail": "Invalid pagination parameters",
+                                        "instance": "/api/v1/matches/1/odds"
+                                    }
+                                    """)))
     })
     @PostMapping(V1_MATCHES + "/{matchId}" + ODDS)
     public ResponseEntity<Void> createMatch(
@@ -115,12 +138,28 @@ public class MatchOddsController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Match odd updated successfully",
                     content = @Content),
-            @ApiResponse(responseCode = "404", description = "Match or match odd not found",
-                    content = @Content),
-            @ApiResponse(responseCode = "400", description = "Invalid match odd data provided",
-                    content = @Content),
-            @ApiResponse(responseCode = "422", description = "Validation error in match odd data",
-                    content = @Content)
+            @ApiResponse(responseCode = "404", description = "Match not found",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class),
+                            examples = @ExampleObject(value = """
+                                    {
+                                        "type": "about:blank",
+                                        "title": "Not Found",
+                                        "status": 404,
+                                        "detail": "Read operation failed for match ID: 999",
+                                        "instance": "/api/v1/matches/999/odds"
+                                    }
+                                    """))),
+            @ApiResponse(responseCode = "400", description = "Invalid parameters",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class),
+                            examples = @ExampleObject(value = """
+                                    {
+                                        "type": "about:blank",
+                                        "title": "Bad Request",
+                                        "status": 400,
+                                        "detail": "Invalid pagination parameters",
+                                        "instance": "/api/v1/matches/1/odds"
+                                    }
+                                    """)))
     })
     @PutMapping(V1_MATCHES + "/{matchId}" + ODDS + "/{matchOddId}")
     public ResponseEntity<Void> updateMatchOdd(
@@ -143,10 +182,28 @@ public class MatchOddsController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Match odd deleted successfully",
                     content = @Content),
-            @ApiResponse(responseCode = "404", description = "Match or match odd not found",
-                    content = @Content),
-            @ApiResponse(responseCode = "400", description = "Invalid match ID or match odd ID format",
-                    content = @Content)
+            @ApiResponse(responseCode = "404", description = "Match not found",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class),
+                            examples = @ExampleObject(value = """
+                                    {
+                                        "type": "about:blank",
+                                        "title": "Not Found",
+                                        "status": 404,
+                                        "detail": "Read operation failed for match ID: 999",
+                                        "instance": "/api/v1/matches/999/odds"
+                                    }
+                                    """))),
+            @ApiResponse(responseCode = "400", description = "Invalid parameters",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class),
+                            examples = @ExampleObject(value = """
+                                    {
+                                        "type": "about:blank",
+                                        "title": "Bad Request",
+                                        "status": 400,
+                                        "detail": "Invalid pagination parameters",
+                                        "instance": "/api/v1/matches/1/odds"
+                                    }
+                                    """)))
     })
     @DeleteMapping(V1_MATCHES + "/{matchId}" + ODDS + "/{matchOddId}")
     public ResponseEntity<Void> deleteMatchOdd(
