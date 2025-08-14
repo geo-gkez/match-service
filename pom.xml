@@ -13,7 +13,7 @@
     <artifactId>match-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>match-service</name>
-    <description>Technical assessment project for managing sports matches and odds</description>
+    <description>managing sports matches and odds</description>
 
     <properties>
         <java.version>21</java.version>
