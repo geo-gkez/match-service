@@ -11,7 +11,7 @@ services:
       postgres_db:
         condition: service_healthy
     ports:
-      - "8085:8080"
+      - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: preprod
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_db:5432/match_service
