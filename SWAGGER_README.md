@@ -8,12 +8,12 @@ This project now includes comprehensive Swagger/OpenAPI documentation for all RE
 
 ### Swagger UI
 Once the application is running, you can access the interactive Swagger UI at:
-- **URL**: http://localhost:8085/swagger-ui.html
+- **URL**: http://localhost:8080/swagger-ui.html
 - **Description**: Interactive API documentation where you can test endpoints directly
 
 ### OpenAPI Specification
 You can also access the raw OpenAPI specification at:
-- **URL**: http://localhost:8085/api-docs
+- **URL**: http://localhost:8080/api-docs
 - **Format**: JSON format OpenAPI 3.0 specification
 
 ## Features Added
@@ -74,7 +74,7 @@ springdoc.show-actuator=false
 ## Testing the API
 
 1. Start the application: `./mvnw spring-boot:run`
-2. Open browser to: http://localhost:8085/swagger-ui.html
+2. Open browser to: http://localhost:8080/swagger-ui.html
 3. Use the "Try it out" buttons to test endpoints interactively
 4. Review the schema definitions for request/response formats
 
