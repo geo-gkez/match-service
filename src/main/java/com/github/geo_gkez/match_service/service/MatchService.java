@@ -59,7 +59,7 @@ public class MatchService {
             Match updatedMatch = matchMapper.updateMatchFromMatchCreateOrUpdateRequest(matchCreateOrUpdateRequest, match);
             saveMatch(updatedMatch);
         } catch (Exception e) {
-            throw new CRUDOperationsException(UPDATE, matchId, 500);
+            throw new CRUDOperationsException(UPDATE, matchId, 500, e);
         }
     }
 

@@ -37,7 +37,7 @@ public class MatchOddService {
         try {
             return matchOddRepository.save(matchOdd);
         } catch (Exception e) {
-            throw new CRUDOperationsException(CRUDOpertionsEnum.CREATE, matchOdd.getMatch().getId(), matchOdd.getId(), 500);
+            throw new CRUDOperationsException(CRUDOpertionsEnum.CREATE, matchOdd.getMatch().getId(), matchOdd.getId(), 500, e);
         }
     }
 
@@ -65,7 +65,7 @@ public class MatchOddService {
             MatchOdd updatedMatchOdd = matchOddMapper.updateMatchOddFromMatchOddCreateOrUpdateRequest(matchOddCreateOrUpdateRequest, matchOdd);
             saveMatchOdd(updatedMatchOdd);
         } catch (Exception e) {
-            throw new CRUDOperationsException(CRUDOpertionsEnum.UPDATE, matchId, matchOddId, 500);
+            throw new CRUDOperationsException(CRUDOpertionsEnum.UPDATE, matchId, matchOddId, 500, e);
         }
     }
 

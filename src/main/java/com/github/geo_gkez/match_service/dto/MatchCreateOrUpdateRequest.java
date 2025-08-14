@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.github.geo_gkez.match_service.validation.SportCheck;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -13,14 +14,16 @@ import static com.github.geo_gkez.match_service.constant.DateFormaterConstants.T
 
 @Schema(description = "Request object for creating or updating a match")
 public record MatchCreateOrUpdateRequest(
-        @Schema(description = "Description of the match (optional, will be auto-generated if not provided)", 
+        @Schema(description = "Description of the match (optional, will be auto-generated if not provided)",
                 example = "Real Madrid - Barcelona")
         String description,
         @Schema(description = "Date of the match", example = "02/08/2024", pattern = DATE_FORMAT_CUSTOM)
         @JsonFormat(pattern = DATE_FORMAT_CUSTOM)
+        @NotNull
         LocalDate matchDate,
         @Schema(description = "Time of the match", example = "20:30", pattern = TIME_FORMAT_CUSTOM)
         @JsonFormat(pattern = TIME_FORMAT_CUSTOM)
+        @NotNull
         LocalTime matchTime,
         @Schema(description = "First team (required)", example = "Real Madrid")
         @NotBlank
@@ -30,6 +33,7 @@ public record MatchCreateOrUpdateRequest(
         String teamB,
         @Schema(description = "Sport type identifier", example = "1")
         @SportCheck
+        @NotNull
         Integer sport
 ) {
     public MatchCreateOrUpdateRequest(String description,
