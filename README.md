@@ -15,7 +15,7 @@ The easiest way to run the project is using Docker Compose, which will handle al
 
 ```bash
 # Clone the repository (if not already done)
-git clone <repository-url>
+git clone https://github.com/geo-gkez/match-service.git
 cd match-service
 
 # Start the application using Docker Compose
